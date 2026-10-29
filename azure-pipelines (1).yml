@@ -1,0 +1,25 @@
+trigger: 
+- main
+
+stages:
+- stage: Build
+  jobs:
+  - job: Build
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: Npm@1
+      inputs:
+       command: 'custom'
+       customCommand: 'install -D tailwindcss postcss autoprefixer'
+    - task: Npm@1
+      inputs:
+       command: 'custom'
+       customCommand: 'run build'
+
+    - task: Npm@1
+      inputs:
+       command: 'publish'
+       workingDir: './dist'
+       publishRegistry: 'useFeed'
+       publishFeed: '8cb88060-0080-4cd0-8a10-eba47a71cffd/dceb07c2-549e-479f-b35d-6d545c11d3ed'
